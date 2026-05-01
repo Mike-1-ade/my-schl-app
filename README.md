@@ -1,1 +1,1 @@
-# my-k8s-app
+# my-schl-app
