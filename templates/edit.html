@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Event - School App{% endblock %}
+
+{% block content %}
+<div class="auth-card card shadow-sm p-4 mx-auto">
+    <h2 class="mb-3">Edit Event</h2>
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">Event title</label>
+            <input name="title" value="{{ event[0] }}" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Event date</label>
+            <input type="date" name="date" value="{{ event[1] }}" class="form-control" required>
+        </div>
+        <button class="btn btn-primary w-100">Update Event</button>
+    </form>
+</div>
+{% endblock %}

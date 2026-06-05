@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}CGPA Result - School App{% endblock %}
+
+{% block content %}
+<div class="auth-card card shadow-sm p-4 mx-auto text-center">
+    <h2 class="mb-3">CGPA Result</h2>
+    <p class="display-6 fw-bold text-primary">{{ cgpa }}</p>
+    <p class="text-muted mb-4">Your CGPA has been calculated from the entered course units and grades.</p>
+    <a href="/" class="btn btn-outline-primary">Back to Dashboard</a>
+</div>
+{% endblock %}

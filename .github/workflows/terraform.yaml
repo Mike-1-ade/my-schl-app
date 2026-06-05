@@ -1,0 +1,49 @@
+name: Terraform EKS depolyment
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    paths:
+        Terraform/
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+          working-directory: Terraform
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup SSH
+        run: |
+           mkdir ~/.ssh
+           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa.pub
+           chmod 600 ~/.ssh/id_rsa.pub
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          aws-access-key-id: ${{ secrets.TF_USER_AWS_KEY }}
+          aws-secret-access-key: ${{ secrets.TF_USER_AWS_SECRET }}
+          aws-region: eu-west-2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        
+      - name: Terraform Init
+        run: terraform init
+        
+      - name: Terraform Plan
+        run: terraform plan -var-file='var/dev.auto.tfvars'
+        
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve -var-file='var/dev.auto.tfvars'
+
+      - name: Terraform destroy
+        if: github.ref == 'refs/heads/main'
+        run: terraform destroy -auto-approve -var-file='var/dev.auto.tfvars'

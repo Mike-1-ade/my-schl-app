@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}CGPA Calculator - School App{% endblock %}
+
+{% block content %}
+<div class="auth-card card shadow-sm p-4 mx-auto">
+    <h2 class="mb-3">Enter Course Details</h2>
+    <form method="POST" action="/calculate">
+        {% for i in range(courses) %}
+            <div class="mb-3 course-block">
+                <label class="form-label">Course {{ i + 1 }}</label>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <input type="number" name="unit{{i}}" class="form-control" min="1" placeholder="Units" required>
+                    </div>
+                    <div class="col-md-6">
+                        <select name="grade{{i}}" class="form-select" required>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="F">F</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <input type="hidden" name="courses" value="{{ courses }}">
+        <button type="submit" class="btn btn-primary w-100">Calculate CGPA</button>
+    </form>
+</div>
+{% endblock %}

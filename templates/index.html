@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - School App{% endblock %}
+
+{% block content %}
+<div class="dashboard-header mb-4">
+    <div>
+        <h1>Welcome back, {{ user }}</h1>
+        <p class="text-muted">Use the sidebar to navigate your dashboard and manage events.</p>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <section id="cgpa-card" class="card dashboard-card">
+        <div class="card-body">
+            <h3 class="card-title">CGPA Calculator</h3>
+            <p class="text-muted">Calculate your GPA based on course units and grades.</p>
+            <form method="POST" action="/cgpa" class="dashboard-form">
+                <div class="mb-3">
+                    <label class="form-label">Number of courses</label>
+                    <input type="number" name="courses" class="form-control" min="1" placeholder="Enter course count" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Start Calculation</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="events-card" class="card dashboard-card">
+        <div class="card-body">
+            <h3 class="card-title">Add New Event</h3>
+            <p class="text-muted">Create an event and it will appear in your calendar.</p>
+            <form method="POST" action="/add_event" class="dashboard-form">
+                <div class="mb-3">
+                    <label class="form-label">Event title</label>
+                    <input type="text" name="title" class="form-control" placeholder="Enter title" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Event date</label>
+                    <input type="date" name="date" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-success">Add Event</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="calendar-card" class="card card-full">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h3 class="card-title">Upcoming Events</h3>
+                    <p class="text-muted">Manage your schedule and edit or remove events.</p>
+                </div>
+                <span class="badge bg-info text-dark">{{ events|length }} events</span>
+            </div>
+
+            {% if events %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Title</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for id, title, date in events %}
+                        <tr>
+                            <td>{{ date }}</td>
+                            <td>{{ title }}</td>
+                            <td class="text-end">
+                                <a href="{{ url_for('edit_event', event_id=id) }}" class="btn btn-sm btn-outline-warning me-2">Edit</a>
+                                <form action="{{ url_for('delete_event', event_id=id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">No events yet — add one using the form above.</p>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+
+
+
+
+
