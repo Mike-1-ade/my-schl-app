@@ -32,7 +32,7 @@ resource "aws_eks_cluster" "cluster" {
     endpoint_private_access = true
     endpoint_public_access  = false
 
-    subnet_ids = concat(aws_subnet.public[*].id, aws_subnet.private[*].id)
+    subnet_ids = concat([for subnet in aws_subnet.public : subnet.id], [for subnet in aws_subnet.private : subnet.id])
   }
 
   # Ensure that IAM Role permissions are created before and deleted
@@ -68,7 +68,7 @@ resource "aws_eks_node_group" "node_group" {
   cluster_name    = var.cluster_name
   node_group_name = var.node_group_name
   node_role_arn   = aws_iam_role.node.arn
-  subnet_ids      = concat(aws_subnet.public[*].id, aws_subnet.private[*].id)
+  subnet_ids      = concat([for subnet in aws_subnet.public : subnet.id], [for subnet in aws_subnet.private : subnet.id])
 
   scaling_config {
     desired_size = var.desired_capacity
