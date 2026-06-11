@@ -50,6 +50,11 @@ resource "aws_eks_cluster" "cluster" {
 
 resource "aws_iam_role" "node" {
   name = var.iam_role_name_node
+  
+ lifecycle {
+    create_before_destroy = true
+  }
+  
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -100,6 +105,11 @@ resource "aws_iam_role_policy_attachment" "node_AmazonEC2ContainerRegistryPullOn
 
 resource "aws_iam_role" "cluster" {
   name = var.iam_role_name_cluster
+  
+  lifecycle {
+    create_before_destroy =true
+  }
+  
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
